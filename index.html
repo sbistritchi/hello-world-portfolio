@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sergiu Bistritchi — Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;600;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6C63FF;
+            --accent: #00B894;
+            --pink: #E84393;
+            --bg: #F8F9FE;
+            --text: #1a1a2e;
+            --text-muted: #888;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        ::selection { background: rgba(108, 99, 255, 0.15); }
+
+        /* ── Hero ── */
+        #hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        #hero canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .hero-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .hero-center .greeting-line {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 0.2s;
+        }
+
+        .hero-center h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -3px;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 0.5s;
+        }
+
+        .hero-center h1 .name-first {
+            display: block;
+            color: #1a1a2e;
+        }
+
+        .hero-center h1 .name-last {
+            display: block;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: fadeUp 1s ease forwards 0.7s, gradientShift 4s ease infinite;
+        }
+
+        .hero-center .tagline {
+            font-size: 1.15rem;
+            color: #999;
+            font-weight: 400;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1s;
+        }
+
+        .hero-center .scroll-hint {
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1.5s;
+            pointer-events: all;
+        }
+
+        .hero-center .scroll-hint a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .hero-center .scroll-hint a:hover { color: var(--primary); }
+
+        .scroll-arrow {
+            width: 18px; height: 18px;
+            border-right: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            transform: rotate(45deg);
+            animation: bounceArrow 2s ease-in-out infinite;
+        }
+
+        @keyframes bounceArrow {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(6px); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.visible { transform: translateY(0); }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav .links { display: flex; gap: 2rem; list-style: none; }
+
+        nav .links a {
+            color: #636e72;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        nav .links a:hover { color: var(--primary); }
+
+        /* ── Sections ── */
+        section {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 3rem;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 2rem;
+        }
+
+        /* ── About ── */
+        .about-content { max-width: 800px; text-align: center; }
+
+        .about-content p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 2;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+        }
+
+        .stats { display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+        .stat { text-align: center; }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* ── Skills ── */
+        #skills { background: rgba(108, 99, 255, 0.02); }
+
+        .skills-grid { max-width: 1000px; width: 100%; text-align: center; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: left;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent 40%, var(--primary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(108, 99, 255, 0.1);
+        }
+
+        .card:hover::after { opacity: 1; }
+
+        .card-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: block; }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.3px;
+        }
+
+        .card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.7; }
+
+        /* ── Contact ── */
+        .contact-content { text-align: center; max-width: 600px; }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .contact-link:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.12);
+        }
+
+        .contact-link svg { width: 18px; height: 18px; fill: var(--primary); }
+
+        /* ── Footer ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 3rem;
+            color: #b2bec3;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        /* ── Scroll Reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero-center h1 { letter-spacing: -1px; }
+            nav .links { gap: 1rem; }
+            nav .links a { font-size: 0.65rem; }
+            .stats { gap: 2rem; }
+            .cards { grid-template-columns: 1fr; }
+            section { padding: 5rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO — Antigravity Confetti -->
+    <section id="hero">
+        <canvas id="confetti-canvas"></canvas>
+
+        <div class="hero-center">
+            <div class="greeting-line">Hello World — Eu sunt</div>
+            <h1>
+                <span class="name-first">Sergiu</span>
+                <span class="name-last">Bistritchi</span>
+            </h1>
+            <p class="tagline">Web Developer & Creative Thinker</p>
+            <div class="scroll-hint">
+                <a href="#about">
+                    Descoperă
+                    <div class="scroll-arrow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <div class="logo">SB.</div>
+        <ul class="links">
+            <li><a href="#hero">Acasă</a></li>
+            <li><a href="#about">Despre</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="about-content reveal">
+            <div class="section-label">Despre mine</div>
+            <h2 class="section-title">Transform idei în realitate digitală</h2>
+            <p>
+                Sunt un dezvoltator web din Moldova, pasionat de crearea aplicațiilor web moderne.
+                Lucrez cu tehnologii actuale precum Laravel, Vue.js și Docker pentru a construi
+                soluții robuste și scalabile. Fiecare proiect e o oportunitate de a învăța ceva nou.
+            </p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" data-target="10">0</div>
+                    <div class="stat-label">Proiecte</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" data-target="5">0</div>
+                    <div class="stat-label">Tehnologii</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" data-target="100">0</div>
+                    <div class="stat-label">% Pasiune</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="skills-grid">
+            <div class="section-label reveal">Ce știu să fac</div>
+            <h2 class="section-title reveal">Tehnologii & Skills</h2>
+            <div class="cards">
+                <div class="card reveal">
+                    <span class="card-icon">🖥️</span>
+                    <h3>Frontend</h3>
+                    <p>HTML, CSS, JavaScript, Vue.js, Tailwind CSS — interfețe responsive și moderne.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">⚙️</span>
+                    <h3>Backend</h3>
+                    <p>PHP, Laravel, REST API, MySQL — arhitecturi solide pentru aplicații complexe.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🐳</span>
+                    <h3>DevOps</h3>
+                    <p>Docker, Linux, Nginx, Git — deploy și management al infrastructurii.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🎯</span>
+                    <h3>Problem Solving</h3>
+                    <p>Debugging, optimizare, integrări API — rezolv provocări tehnice cu plăcere.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">📱</span>
+                    <h3>Responsive Design</h3>
+                    <p>Mobile-first, cross-browser — experiențe perfecte pe orice dispozitiv.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🔗</span>
+                    <h3>Integrări</h3>
+                    <p>SmartBill, WhatsApp API, Payment gateways — conectez sisteme între ele.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="contact-content reveal">
+            <div class="section-label">Hai să vorbim</div>
+            <h2 class="section-title">Contactează-mă</h2>
+            <p style="color: var(--text-muted); line-height: 1.8;">
+                Ai un proiect în minte sau vrei să colaborăm? Scrie-mi și hai să construim ceva extraordinar împreună.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:sergiu@example.com" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    Email
+                </a>
+                <a href="https://github.com/sergiubistritchi" target="_blank" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="https://linkedin.com/in/sergiubistritchi" target="_blank" class="contact-link">
+                    <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Sergiu Bistritchi &mdash; Construit cu pasiune și cod</p>
+    </footer>
+
+    <script>
+    // ═══════════════════════════════════════════════
+    //  ANTIGRAVITY CONFETTI — Dots that react to cursor
+    // ═══════════════════════════════════════════════
+
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    const hero = document.getElementById('hero');
+
+    // Confetti colors (Google-inspired palette)
+    const COLORS = [
+        '#4285F4', // blue
+        '#4285F4',
+        '#EA4335', // red
+        '#FBBC05', // yellow
+        '#34A853', // green
+        '#6C63FF', // purple
+        '#E84393', // pink
+        '#00B894', // teal
+        '#0984E3', // cyan
+        '#F39C12', // orange
+    ];
+
+    // Shapes: 'circle', 'square', 'line', 'triangle'
+    const SHAPES = ['circle', 'circle', 'circle', 'square', 'line', 'triangle'];
+
+    let dots = [];
+    let mouse = { x: -9999, y: -9999 };
+    const MOUSE_RADIUS = 200;   // How far cursor affects dots
+    const GROW_FACTOR = 4;      // Max scale multiplier near cursor
+    const PUSH_FORCE = 3;       // How hard dots get pushed
+
+    function resize() {
+        canvas.width = hero.clientWidth;
+        canvas.height = hero.clientHeight;
+        initDots();
+    }
+
+    function initDots() {
+        dots = [];
+        const area = canvas.width * canvas.height;
+        const count = Math.min(350, Math.floor(area / 4000));
+
+        for (let i = 0; i < count; i++) {
+            dots.push({
+                // Home position (where it wants to return)
+                homeX: Math.random() * canvas.width,
+                homeY: Math.random() * canvas.height,
+                // Current position
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                // Velocity
+                vx: 0,
+                vy: 0,
+                // Base size (small dots)
+                baseSize: 1.5 + Math.random() * 3,
+                // Current display size (grows near cursor)
+                size: 1.5 + Math.random() * 3,
+                // Target size for smooth interpolation
+                targetSize: 0,
+                // Visual
+                color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+                rotation: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.02,
+                // Subtle idle drift
+                driftPhase: Math.random() * Math.PI * 2,
+                driftSpeed: 0.003 + Math.random() * 0.005,
+                driftAmp: 0.3 + Math.random() * 0.5,
+                // Opacity
+                baseOpacity: 0.4 + Math.random() * 0.5,
+                opacity: 0.4,
+            });
+        }
+    }
+
+    // Mouse tracking
+    hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+    });
+
+    // Touch support
+    hero.addEventListener('touchmove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const touch = e.touches[0];
+        mouse.x = touch.clientX - rect.left;
+        mouse.y = touch.clientY - rect.top;
+    });
+
+    hero.addEventListener('touchend', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+    });
+
+    let frame = 0;
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+
+        for (let i = 0; i < dots.length; i++) {
+            const d = dots[i];
+
+            // Distance to mouse
+            const dx = d.x - mouse.x;
+            const dy = d.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            // ── Cursor interaction ──
+            if (dist < MOUSE_RADIUS) {
+                const proximity = 1 - (dist / MOUSE_RADIUS); // 0 at edge, 1 at cursor
+
+                // Grow: closer = bigger
+                d.targetSize = d.baseSize * (1 + proximity * GROW_FACTOR);
+
+                // Push away from cursor
+                if (dist > 1) {
+                    const force = proximity * proximity * PUSH_FORCE;
+                    d.vx += (dx / dist) * force;
+                    d.vy += (dy / dist) * force;
+                }
+
+                // Full opacity near cursor
+                d.opacity = d.baseOpacity + proximity * (1 - d.baseOpacity);
+
+                // Spin faster near cursor
+                d.rotation += d.rotSpeed * (1 + proximity * 8);
+            } else {
+                // Return to base size
+                d.targetSize = d.baseSize;
+                d.opacity += (d.baseOpacity - d.opacity) * 0.05;
+                d.rotation += d.rotSpeed;
+            }
+
+            // Smooth size transition
+            d.size += (d.targetSize - d.size) * 0.15;
+
+            // Gentle drift (idle floating)
+            d.vx += Math.sin(frame * d.driftSpeed + d.driftPhase) * d.driftAmp * 0.02;
+            d.vy += Math.cos(frame * d.driftSpeed + d.driftPhase * 1.3) * d.driftAmp * 0.02;
+
+            // Spring back to home position (very gentle)
+            d.vx += (d.homeX - d.x) * 0.003;
+            d.vy += (d.homeY - d.y) * 0.003;
+
+            // Friction
+            d.vx *= 0.94;
+            d.vy *= 0.94;
+
+            // Move
+            d.x += d.vx;
+            d.y += d.vy;
+
+            // ── Draw ──
+            ctx.save();
+            ctx.translate(d.x, d.y);
+            ctx.rotate(d.rotation);
+            ctx.globalAlpha = d.opacity;
+            ctx.fillStyle = d.color;
+            ctx.strokeStyle = d.color;
+
+            const s = d.size;
+
+            switch (d.shape) {
+                case 'circle':
+                    ctx.beginPath();
+                    ctx.arc(0, 0, s, 0, Math.PI * 2);
+                    ctx.fill();
+                    break;
+
+                case 'square':
+                    ctx.fillRect(-s, -s, s * 2, s * 2);
+                    break;
+
+                case 'line':
+                    ctx.lineWidth = Math.max(1, s * 0.5);
+                    ctx.beginPath();
+                    ctx.moveTo(-s * 1.5, 0);
+                    ctx.lineTo(s * 1.5, 0);
+                    ctx.stroke();
+                    break;
+
+                case 'triangle':
+                    ctx.beginPath();
+                    ctx.moveTo(0, -s);
+                    ctx.lineTo(s, s);
+                    ctx.lineTo(-s, s);
+                    ctx.closePath();
+                    ctx.fill();
+                    break;
+            }
+
+            ctx.restore();
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    animate();
+
+    // ═══════════════════════════════════════════
+    //  NAV + SCROLL REVEAL + COUNTERS
+    // ═══════════════════════════════════════════
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('visible', window.scrollY > window.innerHeight * 0.7);
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => revealObs.observe(el));
+
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const counterObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = +entry.target.dataset.target;
+                let current = 0;
+                const inc = target / 40;
+                const timer = setInterval(() => {
+                    current += inc;
+                    if (current >= target) { current = target; clearInterval(timer); }
+                    entry.target.textContent = Math.floor(current);
+                }, 30);
+                counterObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    statNumbers.forEach(el => counterObs.observe(el));
+
+    </script>
+</body>
+</html>
