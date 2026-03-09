@@ -300,6 +300,95 @@
 
         .card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.7; }
 
+        /* ── Projects ── */
+        #projects { background: #fff; }
+
+        .projects-grid { max-width: 1000px; width: 100%; text-align: center; }
+
+        .project-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+            text-align: left;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(108, 99, 255, 0.1);
+        }
+
+        .project-thumb {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(0, 184, 148, 0.06));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, var(--bg));
+        }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-body .project-type {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-body h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.3px;
+        }
+
+        .project-body p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.3s;
+        }
+
+        .project-card:hover .project-link { gap: 10px; }
+
         /* ── Contact ── */
         .contact-content { text-align: center; max-width: 600px; }
 
@@ -396,6 +485,7 @@
             <li><a href="#hero">Acasă</a></li>
             <li><a href="#about">Despre</a></li>
             <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Proiecte</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -463,6 +553,26 @@
                     <h3>Integrări</h3>
                     <p>SmartBill, WhatsApp API, Payment gateways — conectez sisteme între ele.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <div class="projects-grid">
+            <div class="section-label">Portofoliu</div>
+            <h2 class="section-title">Proiecte Realizate</h2>
+            <div class="project-cards">
+                <a href="catalog.html" class="project-card reveal" style="text-decoration:none; color:inherit;">
+                    <div class="project-thumb" style="background: linear-gradient(135deg, #E30613 0%, #ff4444 100%); display:flex; align-items:center; justify-content:center;">
+                        <span style="font-size:3rem; color:#fff; font-weight:800; letter-spacing:2px;">HERZ</span>
+                    </div>
+                    <div class="project-body">
+                        <h3>Catalog Produse HERZ</h3>
+                        <p>Catalog online interactiv cu 1924 produse HERZ Armaturen — filtrare pe categorii, căutare, vizualizare grid/listă, prețuri RON.</p>
+                        <span class="project-link">Deschide catalogul →</span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
